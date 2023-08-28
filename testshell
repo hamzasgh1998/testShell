@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Main menu
+OPTION=$(zenity --list --title="Main Menu" --column="Options" "Hardware Information" "System Information")
+
+case "$OPTION" in
+
+"Hardware Information")
+    # Hardware submenu
+    HW_OPTION=$(zenity --list --title="Hardware Information" --column="Options" "RAM Infos" "DDR Infos" "CPU Infos")
+    
+    case "$HW_OPTION" in
+    "RAM Infos")
+        RAM_INFO=$(free -h)
+        zenity --info --title="RAM Information" --text="$RAM_INFO" --width=400 --height=200
+        ;;
+    "DDR Infos")
+        DDR_INFO=$(sudo dmidecode --type 17 | grep -E "Size|Speed")
+        zenity --info --title="DDR Information" --text="$DDR_INFO" --width=400 --height=200
+        ;;
+    "CPU Infos")
+        CPU_INFO=$(lscpu)
+        zenity --info --title="CPU Information" --text="$CPU_INFO" --width=400 --height=200
+        ;;
+    esac
+    ;;
+
+"System Information")
+    # System submenu
+    SYS_OPTION=$(zenity --list --title="System Information" --column="Options" "Kernel Version" "System Version")
+    
+    case "$SYS_OPTION" in
+    "Kernel Version")
+        KERNEL_INFO=$(uname -r)
+        zenity --info --title="Kernel Version" --text="$KERNEL_INFO" --width=200 --height=100
+        ;;
+    "System Version")
+        OS_INFO=$(lsb_release -ds)
+        zenity --info --title="System Version" --text="$OS_INFO" --width=200 --height=100
+        ;;
+    esac
+    ;;
+
+esac
